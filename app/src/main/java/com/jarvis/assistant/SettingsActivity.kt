@@ -17,7 +17,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val masterKey = MasterKey.Builder(this).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
         val prefs = EncryptedSharedPreferences.create(
-            this, "jarvis_secure_prefs", masterKey, applicationContext,
+            applicationContext, "jarvis_secure_prefs", masterKey,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
