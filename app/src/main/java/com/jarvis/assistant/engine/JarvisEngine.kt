@@ -79,12 +79,12 @@ class JarvisEngine(private val appContext: Context, private val listener: Listen
     }
 
     private fun buildBrain(): Brain {
-        return when (prefs.getString("brain_backend", "pollinations")) {
+        return when (prefs.getString("brain_backend", "gemini")) {
             "local" -> LocalBrain(appContext)
-            "gemini" -> GeminiBrain(prefs.getString("gemini_api_key", "") ?: "")
             "openai" -> OpenAIBrain(prefs.getString("openai_api_key", "") ?: "")
             "deepseek" -> DeepSeekBrain(prefs.getString("deepseek_api_key", "") ?: "")
-            else -> PollinationsBrain() // default and fallback: free, no key needed
+            "pollinations" -> PollinationsBrain()
+            else -> GeminiBrain(prefs.getString("gemini_api_key", "") ?: "")
         }
     }
 

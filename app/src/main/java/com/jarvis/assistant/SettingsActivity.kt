@@ -35,12 +35,12 @@ class SettingsActivity : AppCompatActivity() {
         binding.deepseekKeyInput.setText(prefs.getString("deepseek_api_key", ""))
 
         // Select the currently active backend radio button
-        when (prefs.getString("brain_backend", "pollinations")) {
-            "gemini" -> binding.radioGemini.isChecked = true
+        when (prefs.getString("brain_backend", "gemini")) {
+            "pollinations" -> binding.radioPollinations.isChecked = true
             "openai" -> binding.radioOpenAI.isChecked = true
             "deepseek" -> binding.radioDeepSeek.isChecked = true
             "local" -> binding.radioLocal.isChecked = true
-            else -> binding.radioPollinations.isChecked = true
+            else -> binding.radioGemini.isChecked = true
         }
 
         when (prefs.getString("theme_id", "matrix")) {
@@ -53,11 +53,11 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.saveButton.setOnClickListener {
             val backend = when (binding.backendGroup.checkedRadioButtonId) {
-                binding.radioGemini.id -> "gemini"
+                binding.radioPollinations.id -> "pollinations"
                 binding.radioOpenAI.id -> "openai"
                 binding.radioDeepSeek.id -> "deepseek"
                 binding.radioLocal.id -> "local"
-                else -> "pollinations"
+                else -> "gemini"
             }
 
             val themeId = when (binding.themeGroup.checkedRadioButtonId) {

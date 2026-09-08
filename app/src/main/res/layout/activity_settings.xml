@@ -25,9 +25,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp">
 
-            <RadioButton android:id="@+id/radioPollinations" android:text="Pollinations.ai — free, no key needed (default)"
+            <RadioButton android:id="@+id/radioGemini" android:text="Gemini (Google) — free tier, recommended"
                 android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
-            <RadioButton android:id="@+id/radioGemini" android:text="Gemini (Google) — free tier"
+            <RadioButton android:id="@+id/radioPollinations" android:text="Pollinations.ai — free but rate-limited/unreliable"
                 android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
             <RadioButton android:id="@+id/radioOpenAI" android:text="OpenAI — paid"
                 android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />

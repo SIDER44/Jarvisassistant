@@ -218,16 +218,23 @@ Open Jarvis → Settings. Pick one backend and paste its key — you can store a
 
 | Provider | Cost | Get a key |
 |---|---|---|
-| **Pollinations.ai** (default) | Fully free, **no key needed at all** | Nothing to set up |
-| **Gemini** (Google) | Free tier is genuinely usable for personal assistant use | https://aistudio.google.com/apikey |
+| **Gemini** (Google) — default | Free tier, genuinely generous quota | https://aistudio.google.com/apikey |
 | **DeepSeek** | Very cheap; some accounts get promo credit | https://platform.deepseek.com |
 | **OpenAI** | Pay-as-you-go, no free tier | https://platform.openai.com/api-keys |
+| **Pollinations.ai** | Free but now rate/credit-limited in practice (see below) | Nothing to set up, but unreliable |
 | **Local (offline)** | Fully free, no key needed | See "fully free" section above |
 
-Claude was removed from the picker after repeated confusion with the 401
-"x-api-key header is required" error — it kept ending up selected by default
-with no key entered. Pollinations is now the default so the app works
-out of the box with zero configuration.
+**Update**: Pollinations.ai changed its model since this app first added it — it
+now runs on a "Pollen credit" system with tight anonymous rate limits
+(roughly 1 request per 15 seconds), and a 402 error there means the free
+allotment is exhausted, not a temporary glitch. It's no longer the reliable
+zero-setup option it once was, so **Gemini is now the default** — it does
+require a one-time free API key, but the free tier is a real, generous quota
+rather than a rate-limited trial.
+
+**You must complete this one-time step after updating**: open Settings, paste
+your Gemini key into the Gemini field (get one free at the link above if you
+haven't), make sure the Gemini radio button is selected, and Save.
 
 ## Known limitations / honest expectations
 
