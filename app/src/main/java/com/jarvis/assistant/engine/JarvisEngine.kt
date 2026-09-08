@@ -8,7 +8,6 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.jarvis.assistant.actions.DeviceActions
 import com.jarvis.assistant.brain.Brain
-import com.jarvis.assistant.brain.ClaudeBrain
 import com.jarvis.assistant.brain.DeepSeekBrain
 import com.jarvis.assistant.brain.GeminiBrain
 import com.jarvis.assistant.brain.LocalBrain
@@ -80,13 +79,12 @@ class JarvisEngine(private val appContext: Context, private val listener: Listen
     }
 
     private fun buildBrain(): Brain {
-        return when (prefs.getString("brain_backend", "claude")) {
+        return when (prefs.getString("brain_backend", "pollinations")) {
             "local" -> LocalBrain(appContext)
             "gemini" -> GeminiBrain(prefs.getString("gemini_api_key", "") ?: "")
             "openai" -> OpenAIBrain(prefs.getString("openai_api_key", "") ?: "")
             "deepseek" -> DeepSeekBrain(prefs.getString("deepseek_api_key", "") ?: "")
-            "pollinations" -> PollinationsBrain()
-            else -> ClaudeBrain(prefs.getString("claude_api_key", "") ?: "")
+            else -> PollinationsBrain() // default and fallback: free, no key needed
         }
     }
 

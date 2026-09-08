@@ -30,19 +30,17 @@ class SettingsActivity : AppCompatActivity() {
         )
 
         // Load existing keys
-        binding.claudeKeyInput.setText(prefs.getString("claude_api_key", ""))
         binding.geminiKeyInput.setText(prefs.getString("gemini_api_key", ""))
         binding.openaiKeyInput.setText(prefs.getString("openai_api_key", ""))
         binding.deepseekKeyInput.setText(prefs.getString("deepseek_api_key", ""))
 
         // Select the currently active backend radio button
-        when (prefs.getString("brain_backend", "claude")) {
+        when (prefs.getString("brain_backend", "pollinations")) {
             "gemini" -> binding.radioGemini.isChecked = true
             "openai" -> binding.radioOpenAI.isChecked = true
             "deepseek" -> binding.radioDeepSeek.isChecked = true
             "local" -> binding.radioLocal.isChecked = true
-            "pollinations" -> binding.radioPollinations.isChecked = true
-            else -> binding.radioClaude.isChecked = true
+            else -> binding.radioPollinations.isChecked = true
         }
 
         when (prefs.getString("theme_id", "matrix")) {
@@ -59,8 +57,7 @@ class SettingsActivity : AppCompatActivity() {
                 binding.radioOpenAI.id -> "openai"
                 binding.radioDeepSeek.id -> "deepseek"
                 binding.radioLocal.id -> "local"
-                binding.radioPollinations.id -> "pollinations"
-                else -> "claude"
+                else -> "pollinations"
             }
 
             val themeId = when (binding.themeGroup.checkedRadioButtonId) {
@@ -74,7 +71,6 @@ class SettingsActivity : AppCompatActivity() {
             prefs.edit()
                 .putString("brain_backend", backend)
                 .putString("theme_id", themeId)
-                .putString("claude_api_key", binding.claudeKeyInput.text.toString().trim())
                 .putString("gemini_api_key", binding.geminiKeyInput.text.toString().trim())
                 .putString("openai_api_key", binding.openaiKeyInput.text.toString().trim())
                 .putString("deepseek_api_key", binding.deepseekKeyInput.text.toString().trim())

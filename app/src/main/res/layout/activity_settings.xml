@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp">
 
-            <RadioButton android:id="@+id/radioClaude" android:text="Claude (Anthropic) — paid"
+            <RadioButton android:id="@+id/radioPollinations" android:text="Pollinations.ai — free, no key needed (default)"
                 android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
             <RadioButton android:id="@+id/radioGemini" android:text="Gemini (Google) — free tier"
                 android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
@@ -35,14 +35,7 @@
                 android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
             <RadioButton android:id="@+id/radioLocal" android:text="Offline local model — fully free"
                 android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
-            <RadioButton android:id="@+id/radioPollinations" android:text="Pollinations.ai — free, no key needed"
-                android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
         </RadioGroup>
-
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="Claude API Key" android:textColor="@color/text_dim" android:fontFamily="monospace" />
-        <EditText android:id="@+id/claudeKeyInput" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:hint="sk-ant-..." android:inputType="textPassword" android:textColor="@color/text_primary" />
 
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="Gemini API Key" android:textColor="@color/text_dim" android:fontFamily="monospace"

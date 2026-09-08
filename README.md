@@ -218,14 +218,16 @@ Open Jarvis → Settings. Pick one backend and paste its key — you can store a
 
 | Provider | Cost | Get a key |
 |---|---|---|
-| **Pollinations.ai** | Fully free, **no key needed at all** — just select it | Nothing to set up |
+| **Pollinations.ai** (default) | Fully free, **no key needed at all** | Nothing to set up |
 | **Gemini** (Google) | Free tier is genuinely usable for personal assistant use | https://aistudio.google.com/apikey |
 | **DeepSeek** | Very cheap; some accounts get promo credit | https://platform.deepseek.com |
-| **Claude** (Anthropic) | Pay-as-you-go | https://console.anthropic.com |
 | **OpenAI** | Pay-as-you-go, no free tier | https://platform.openai.com/api-keys |
 | **Local (offline)** | Fully free, no key needed | See "fully free" section above |
 
-If you want the absolute zero-setup option, **pick Pollinations** — no key field to fill in, no account, no billing. Quality/uptime is community-service-grade (not guaranteed like a paid API), but it costs nothing and just works.
+Claude was removed from the picker after repeated confusion with the 401
+"x-api-key header is required" error — it kept ending up selected by default
+with no key entered. Pollinations is now the default so the app works
+out of the box with zero configuration.
 
 ## Known limitations / honest expectations
 
