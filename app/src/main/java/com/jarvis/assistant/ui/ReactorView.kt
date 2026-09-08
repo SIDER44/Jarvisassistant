@@ -66,15 +66,20 @@ class ReactorView @JvmOverloads constructor(
         amplitude = level.coerceIn(0f, 1f)
     }
 
-    private fun colorForState(): Int = context.getColor(
-        when (state) {
-            ReactorState.IDLE -> R.color.core_idle_cyan
-            ReactorState.LISTENING -> R.color.core_listening_green
-            ReactorState.THINKING -> R.color.core_thinking_violet
-            ReactorState.SPEAKING -> R.color.core_speaking_amber
-            ReactorState.ERROR -> R.color.core_error_red
+    private var idleAccent: Int = context.getColor(R.color.core_idle_cyan)
+
+    fun setThemeAccent(color: Int) {
+        idleAccent = color
+        invalidate()
+    }
+
+    private fun colorForState(): Int = when (state) {
+            ReactorState.IDLE -> idleAccent
+            ReactorState.LISTENING -> context.getColor(R.color.core_listening_green)
+            ReactorState.THINKING -> context.getColor(R.color.core_thinking_violet)
+            ReactorState.SPEAKING -> context.getColor(R.color.core_speaking_amber)
+            ReactorState.ERROR -> context.getColor(R.color.core_error_red)
         }
-    )
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)

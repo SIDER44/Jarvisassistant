@@ -39,6 +39,14 @@ class SettingsActivity : AppCompatActivity() {
             else -> binding.radioClaude.isChecked = true
         }
 
+        when (prefs.getString("theme_id", "matrix")) {
+            "iron_man" -> binding.themeIronMan.isChecked = true
+            "ultron" -> binding.themeUltron.isChecked = true
+            "vibranium" -> binding.themeVibranium.isChecked = true
+            "gold_titanium" -> binding.themeGold.isChecked = true
+            else -> binding.themeMatrix.isChecked = true
+        }
+
         binding.saveButton.setOnClickListener {
             val backend = when (binding.backendGroup.checkedRadioButtonId) {
                 binding.radioGemini.id -> "gemini"
@@ -48,8 +56,17 @@ class SettingsActivity : AppCompatActivity() {
                 else -> "claude"
             }
 
+            val themeId = when (binding.themeGroup.checkedRadioButtonId) {
+                binding.themeIronMan.id -> "iron_man"
+                binding.themeUltron.id -> "ultron"
+                binding.themeVibranium.id -> "vibranium"
+                binding.themeGold.id -> "gold_titanium"
+                else -> "matrix"
+            }
+
             prefs.edit()
                 .putString("brain_backend", backend)
+                .putString("theme_id", themeId)
                 .putString("claude_api_key", binding.claudeKeyInput.text.toString().trim())
                 .putString("gemini_api_key", binding.geminiKeyInput.text.toString().trim())
                 .putString("openai_api_key", binding.openaiKeyInput.text.toString().trim())

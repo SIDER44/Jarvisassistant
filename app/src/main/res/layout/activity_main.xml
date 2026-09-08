@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/void_black">
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/void_black"
     android:padding="20dp">
 
     <!-- Top status bar -->
@@ -11,9 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="4dp">
 
         <TextView
+            android:id="@+id/titleLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -25,6 +30,16 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/weatherLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/text_dim"
+            android:fontFamily="monospace"
+            android:textSize="12sp"
+            android:layout_marginEnd="12dp" />
+
+        <TextView
             android:id="@+id/statusLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,6 +47,26 @@
             android:textColor="@color/text_dim"
             android:fontFamily="monospace"
             android:textSize="13sp" />
+    </LinearLayout>
+
+    <!-- Stat gauge row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="4dp">
+
+        <com.jarvis.assistant.ui.GaugeRingView
+            android:id="@+id/batteryGauge"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="16dp" />
+
+        <com.jarvis.assistant.ui.GaugeRingView
+            android:id="@+id/storageGauge"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
     </LinearLayout>
 
     <!-- Reactor core, fills the middle -->
@@ -52,10 +87,10 @@
     <ScrollView
         android:id="@+id/logScroll"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="120dp"
         android:background="@color/panel_dark"
         android:padding="10dp"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:id="@+id/logText"
@@ -66,6 +101,28 @@
             android:textColor="@color/core_idle_cyan"
             android:text="&gt; system online. tap the core to speak." />
     </ScrollView>
+
+    <!-- Taskbar: quick app shortcuts -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="10dp">
+
+        <ImageButton android:id="@+id/shortcutPhone" android:layout_width="48dp" android:layout_height="48dp"
+            android:background="@android:color/transparent" android:src="@android:drawable/sym_action_call"
+            android:layout_marginEnd="20dp" android:contentDescription="Phone" />
+        <ImageButton android:id="@+id/shortcutCamera" android:layout_width="48dp" android:layout_height="48dp"
+            android:background="@android:color/transparent" android:src="@android:drawable/ic_menu_camera"
+            android:layout_marginEnd="20dp" android:contentDescription="Camera" />
+        <ImageButton android:id="@+id/shortcutBrowser" android:layout_width="48dp" android:layout_height="48dp"
+            android:background="@android:color/transparent" android:src="@android:drawable/ic_menu_compass"
+            android:layout_marginEnd="20dp" android:contentDescription="Browser" />
+        <ImageButton android:id="@+id/shortcutMessages" android:layout_width="48dp" android:layout_height="48dp"
+            android:background="@android:color/transparent" android:src="@android:drawable/sym_action_chat"
+            android:contentDescription="Messages" />
+    </LinearLayout>
 
     <!-- Controls -->
     <LinearLayout
@@ -100,3 +157,17 @@
     </LinearLayout>
 
 </LinearLayout>
+
+    <!-- Watermark -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="6dp"
+        android:text="ALMEER TECH"
+        android:textColor="#405C7A99"
+        android:fontFamily="monospace"
+        android:textSize="9sp"
+        android:letterSpacing="0.1" />
+
+</FrameLayout>

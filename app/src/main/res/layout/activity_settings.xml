@@ -60,6 +60,34 @@
         <EditText android:id="@+id/deepseekKeyInput" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:hint="sk-..." android:inputType="textPassword" android:textColor="@color/text_primary" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="COLOR THEME"
+            android:textColor="@color/core_idle_cyan"
+            android:fontFamily="monospace"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp" />
+
+        <RadioGroup
+            android:id="@+id/themeGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <RadioButton android:id="@+id/themeIronMan" android:text="Iron Man (blue)"
+                android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <RadioButton android:id="@+id/themeMatrix" android:text="Matrix (green)"
+                android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <RadioButton android:id="@+id/themeUltron" android:text="Ultron (red)"
+                android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <RadioButton android:id="@+id/themeVibranium" android:text="Vibranium (purple)"
+                android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <RadioButton android:id="@+id/themeGold" android:text="Gold Titanium"
+                android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
+        </RadioGroup>
+
         <Button
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"

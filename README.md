@@ -159,6 +159,15 @@ color tokens, no redesign needed.
 
 If your commit history looks like this since you deployed the previous version, it's the same repo — just push app/src changes and the new .github and drawable files, then re-run Actions.
 
+## HUD dashboard upgrade
+
+Inspired by the classic Iron Man interface:
+- **Live stat rings**: battery % and storage used %, top of screen
+- **Weather**: small temp readout next to the status label (needs location permission + internet; free via Open-Meteo, no API key)
+- **Taskbar**: quick shortcuts to Phone, Camera, Browser, Messages along the bottom
+- **Color themes**: Settings → pick Iron Man (blue), Matrix (green, default), Ultron (red), Vibranium (purple), or Gold Titanium — changes the core, terminal text, and title accent instantly
+- **"ALMEER TECH" watermark** in the bottom-right corner
+
 ## Choosing an AI brain (multiple providers supported)
 
 Open Jarvis → Settings. Pick one backend and paste its key — you can store all four keys at once and just flip the radio button to switch anytime, no rebuild needed.

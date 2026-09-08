@@ -34,7 +34,7 @@ class GeminiBrain(private val apiKey: String) : Brain {
             }
 
             val url = "https://generativelanguage.googleapis.com/v1beta/models/" +
-                "gemini-2.0-flash:generateContent?key=$apiKey"
+                "gemini-3.6-flash:generateContent?key=$apiKey"
 
             val request = Request.Builder()
                 .url(url)

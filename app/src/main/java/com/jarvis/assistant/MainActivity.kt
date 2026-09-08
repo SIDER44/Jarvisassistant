@@ -3,6 +3,7 @@ package com.jarvis.assistant
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -11,8 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.jarvis.assistant.databinding.ActivityMainBinding
 import com.jarvis.assistant.engine.JarvisEngine
+import com.jarvis.assistant.engine.SystemStatsProvider
+import com.jarvis.assistant.engine.WeatherProvider
 import com.jarvis.assistant.service.WakeWordService
 import com.jarvis.assistant.ui.ReactorState
+import com.jarvis.assistant.ui.ThemeManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,6 +28,7 @@ class MainActivity : AppCompatActivity(), JarvisEngine.Listener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var engine: JarvisEngine
     private val timeFmt = SimpleDateFormat("HH:mm:ss", Locale.US)
+    private var accentColor: Int = 0
 
     private val speechLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -41,7 +46,10 @@ class MainActivity : AppCompatActivity(), JarvisEngine.Listener {
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
-    ) { maybeAutoStartWakeWord() }
+    ) {
+        maybeAutoStartWakeWord()
+        refreshWeather()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +57,7 @@ class MainActivity : AppCompatActivity(), JarvisEngine.Listener {
         setContentView(binding.root)
 
         engine = JarvisEngine(applicationContext, this)
+        applyTheme()
 
         requestNeededPermissions()
 
@@ -56,8 +65,8 @@ class MainActivity : AppCompatActivity(), JarvisEngine.Listener {
         binding.settingsButton.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
+        wireTaskbarShortcuts()
 
-        // Wake word defaults to ON — this is meant to be hands-free from the start
         val wakeWordOn = engine.prefs.getBoolean("wake_word_enabled", true)
         binding.wakeWordToggle.isChecked = wakeWordOn
         binding.wakeWordToggle.setOnCheckedChangeListener { _, enabled ->
@@ -69,6 +78,59 @@ class MainActivity : AppCompatActivity(), JarvisEngine.Listener {
             log("system online. tap the core to speak, or just say \"Jarvis\".")
             maybeGreetOnFirstLaunch()
             maybeAutoStartWakeWord()
+        }
+
+        refreshStatsGauges()
+        refreshWeather()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        applyTheme()
+        refreshStatsGauges()
+    }
+
+    private fun applyTheme() {
+        val theme = ThemeManager.byId(engine.prefs.getString("theme_id", "matrix"))
+        accentColor = theme.accent
+        binding.titleLabel.setTextColor(accentColor)
+        binding.logText.setTextColor(accentColor)
+        binding.settingsButton.setTextColor(accentColor)
+        binding.reactorView.setThemeAccent(accentColor)
+    }
+
+    private fun refreshStatsGauges() {
+        val stats = SystemStatsProvider.read(applicationContext)
+        binding.batteryGauge.setValue(stats.batteryPercent / 100f, "${stats.batteryPercent}%", "BATTERY", accentColor)
+        binding.storageGauge.setValue(stats.storageUsedPercent / 100f, "${stats.storageUsedPercent}%", "STORAGE", accentColor)
+    }
+
+    private fun refreshWeather() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val weather = WeatherProvider.fetchForCurrentLocation(applicationContext)
+            binding.weatherLabel.text = if (weather != null) "${weather.tempC.toInt()}°C" else ""
+        }
+    }
+
+    private fun wireTaskbarShortcuts() {
+        binding.shortcutPhone.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_DIAL))
+        }
+        binding.shortcutCamera.setOnClickListener {
+            startActivity(Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE))
+        }
+        binding.shortcutBrowser.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com")))
+        }
+        binding.shortcutMessages.setOnClickListener {
+            val intent = Intent(Intent.ACTION_MAIN).apply {
+                addCategory(Intent.CATEGORY_APP_MESSAGING)
+            }
+            try {
+                startActivity(intent)
+            } catch (e: Exception) {
+                log("! no messaging app found")
+            }
         }
     }
 
@@ -103,7 +165,8 @@ class MainActivity : AppCompatActivity(), JarvisEngine.Listener {
         val needed = mutableListOf(
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.SEND_SMS,
-            Manifest.permission.READ_CONTACTS
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.ACCESS_COARSE_LOCATION
         )
         if (Build.VERSION.SDK_INT >= 33) needed.add(Manifest.permission.POST_NOTIFICATIONS)
         val toRequest = needed.filter {
@@ -147,6 +210,7 @@ class MainActivity : AppCompatActivity(), JarvisEngine.Listener {
                 if (!isFinishing && !isDestroyed) onStateChanged(JarvisEngine.EngineState.IDLE)
             }, 1500)
         }
+        if (state == JarvisEngine.EngineState.IDLE) refreshStatsGauges()
     }
 
     override fun onLog(line: String) {
