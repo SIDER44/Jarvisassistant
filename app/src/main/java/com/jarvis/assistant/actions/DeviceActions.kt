@@ -4,11 +4,13 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioManager
 import android.net.Uri
 import android.provider.AlarmClock
 import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.telephony.SmsManager
+import android.view.KeyEvent
 import androidx.core.content.ContextCompat
 
 /**
@@ -23,6 +25,29 @@ object DeviceActions {
 
     fun tryHandle(context: Context, text: String): String? {
         val lower = text.lowercase().trim()
+
+        // Media transport controls — checked BEFORE "play <song>" so
+        // "stop the music" / "pause" / "next song" don't get treated as a song title.
+        if (Regex("(?:pause|stop)(?: the)? (?:music|song|playback)?").matches(lower) ||
+            lower in listOf("pause", "stop", "pause music", "stop music")
+        ) {
+            dispatchMediaKey(context, KeyEvent.KEYCODE_MEDIA_PAUSE)
+            return "Paused"
+        }
+        if (Regex("(?:resume|continue|unpause)(?: the)? ?(?:music|song|playback)?").matches(lower) ||
+            lower in listOf("resume", "continue", "play music", "resume music", "unpause")
+        ) {
+            dispatchMediaKey(context, KeyEvent.KEYCODE_MEDIA_PLAY)
+            return "Resuming"
+        }
+        if (lower in listOf("next song", "skip", "skip song", "next track")) {
+            dispatchMediaKey(context, KeyEvent.KEYCODE_MEDIA_NEXT)
+            return "Skipping to next track"
+        }
+        if (lower in listOf("previous song", "go back", "last song", "previous track")) {
+            dispatchMediaKey(context, KeyEvent.KEYCODE_MEDIA_PREVIOUS)
+            return "Going to previous track"
+        }
 
         // "play believer by imagine dragons" / "play some jazz"
         Regex("play (?:the song )?(.+)").find(lower)?.let { match ->
@@ -118,6 +143,17 @@ object DeviceActions {
         }
 
         return null // no local match — let the LLM brain handle it
+    }
+
+    private fun dispatchMediaKey(context: Context, keyCode: Int) {
+        try {
+            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            audioManager.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, keyCode))
+            audioManager.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, keyCode))
+        } catch (e: Exception) {
+            // Some devices/OEMs restrict this; the reply text still confirms
+            // intent to the user even if the underlying dispatch silently no-ops.
+        }
     }
 
     private const val SearchManagerQuery = "query"

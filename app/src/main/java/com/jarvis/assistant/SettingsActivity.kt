@@ -1,12 +1,17 @@
 package com.jarvis.assistant
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.jarvis.assistant.databinding.ActivitySettingsBinding
+import com.jarvis.assistant.engine.UpdateChecker
 import com.jarvis.assistant.service.WakeWordService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -36,6 +41,7 @@ class SettingsActivity : AppCompatActivity() {
             "openai" -> binding.radioOpenAI.isChecked = true
             "deepseek" -> binding.radioDeepSeek.isChecked = true
             "local" -> binding.radioLocal.isChecked = true
+            "pollinations" -> binding.radioPollinations.isChecked = true
             else -> binding.radioClaude.isChecked = true
         }
 
@@ -53,6 +59,7 @@ class SettingsActivity : AppCompatActivity() {
                 binding.radioOpenAI.id -> "openai"
                 binding.radioDeepSeek.id -> "deepseek"
                 binding.radioLocal.id -> "local"
+                binding.radioPollinations.id -> "pollinations"
                 else -> "claude"
             }
 
@@ -80,6 +87,27 @@ class SettingsActivity : AppCompatActivity() {
                 startForegroundService(serviceIntent)
             }
             finish()
+        }
+
+        binding.checkUpdateButton.setOnClickListener {
+            binding.updateStatusText.text = "Checking..."
+            CoroutineScope(Dispatchers.Main).launch {
+                val currentCode = packageManager.getPackageInfo(packageName, 0).let {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) it.longVersionCode.toInt() else it.versionCode
+                }
+                val update = UpdateChecker.checkForUpdate(currentCode)
+                if (update == null) {
+                    binding.updateStatusText.text = "You're on the latest build (#$currentCode)."
+                } else {
+                    binding.updateStatusText.text = "Downloading ${update.versionTag}..."
+                    val ok = UpdateChecker.downloadAndInstall(applicationContext, update)
+                    binding.updateStatusText.text = if (ok) {
+                        "Downloaded — confirm the install prompt."
+                    } else {
+                        "Update download failed. Check your connection and try again."
+                    }
+                }
+            }
         }
     }
 }

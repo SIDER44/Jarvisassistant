@@ -35,6 +35,8 @@
                 android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
             <RadioButton android:id="@+id/radioLocal" android:text="Offline local model — fully free"
                 android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <RadioButton android:id="@+id/radioPollinations" android:text="Pollinations.ai — free, no key needed"
+                android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
         </RadioGroup>
 
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -97,6 +99,25 @@
             android:textColor="@color/core_idle_cyan"
             android:backgroundTint="@color/panel_dark"
             android:layout_marginTop="24dp" />
+
+        <Button
+            android:id="@+id/checkUpdateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CHECK FOR UPDATE"
+            android:fontFamily="monospace"
+            android:textColor="@color/text_dim"
+            android:backgroundTint="@color/panel_dark"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:id="@+id/updateStatusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_dim"
+            android:fontFamily="monospace"
+            android:textSize="11sp"
+            android:layout_marginTop="8dp" />
 
     </LinearLayout>
 </ScrollView>

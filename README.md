@@ -175,6 +175,34 @@ old random one to this new fixed one — Android will refuse to install over a
 mismatched signature) — but from here on, future updates will preserve
 everything without needing to uninstall.
 
+## In-app updates (no more manual GitHub Actions hunting)
+
+True silent self-updating isn't possible for a normal Android app — the OS
+always requires you to confirm an install, even for updates to an already-installed
+app. But this build gets it down to one tap:
+
+1. Push your changes to GitHub as usual and let Actions build
+2. The workflow now also publishes a **GitHub Release** with the APK attached automatically
+3. In the Jarvis app: **Settings → Check for Update** — it checks the release, downloads
+   the new APK if there is one, and pops the Android install confirmation directly
+4. Tap **Install** on that one prompt — done
+
+**One-time setup**: open `UpdateChecker.kt` and confirm the `REPO` constant matches
+your actual GitHub username/repo (already set to `SIDER44/JarvisAssistant`).
+
+## Voice commands it understands
+
+- **"open [app name]"** — launches any installed app by name
+- **"text [number or contact] saying [message]"** — sends an SMS directly (needs SMS + Contacts permission)
+- **"play [song/artist]"** — opens your music app's voice search to play it
+- **"pause" / "stop"** — pauses whatever's currently playing
+- **"resume" / "continue"** — resumes playback
+- **"next song" / "skip"** — skips to the next track
+- **"previous song"** — goes back a track
+- **"set an alarm for [time]"** — sets a system alarm
+- **"search for [anything]"** — opens a Google search
+- Anything else falls through to your selected AI brain for a conversational reply
+
 ## HUD dashboard upgrade
 
 Inspired by the classic Iron Man interface:
@@ -190,13 +218,14 @@ Open Jarvis → Settings. Pick one backend and paste its key — you can store a
 
 | Provider | Cost | Get a key |
 |---|---|---|
+| **Pollinations.ai** | Fully free, **no key needed at all** — just select it | Nothing to set up |
 | **Gemini** (Google) | Free tier is genuinely usable for personal assistant use | https://aistudio.google.com/apikey |
 | **DeepSeek** | Very cheap; some accounts get promo credit | https://platform.deepseek.com |
 | **Claude** (Anthropic) | Pay-as-you-go | https://console.anthropic.com |
 | **OpenAI** | Pay-as-you-go, no free tier | https://platform.openai.com/api-keys |
 | **Local (offline)** | Fully free, no key needed | See "fully free" section above |
 
-If you want to start with zero cost, **Gemini is the best pick** of the paid-API options — sign up, generate a key, select "Gemini" in Settings, paste it, save.
+If you want the absolute zero-setup option, **pick Pollinations** — no key field to fill in, no account, no billing. Quality/uptime is community-service-grade (not guaranteed like a paid API), but it costs nothing and just works.
 
 ## Known limitations / honest expectations
 

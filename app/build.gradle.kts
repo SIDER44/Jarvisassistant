@@ -20,8 +20,8 @@ android {
         applicationId = "com.jarvis.assistant"
         minSdk = 26          // Android 8.0+ (covers Android 13 / API 33 devices)
         targetSdk = 33       // Android 13
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = (System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInt()
+        versionName = "build-" + (System.getenv("GITHUB_RUN_NUMBER") ?: "1")
     }
 
     buildTypes {
@@ -39,6 +39,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 

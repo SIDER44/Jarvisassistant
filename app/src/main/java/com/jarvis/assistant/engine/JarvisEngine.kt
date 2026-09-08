@@ -13,6 +13,7 @@ import com.jarvis.assistant.brain.DeepSeekBrain
 import com.jarvis.assistant.brain.GeminiBrain
 import com.jarvis.assistant.brain.LocalBrain
 import com.jarvis.assistant.brain.OpenAIBrain
+import com.jarvis.assistant.brain.PollinationsBrain
 
 /**
  * All the "thinking" logic in one place: reads settings, picks a brain,
@@ -84,6 +85,7 @@ class JarvisEngine(private val appContext: Context, private val listener: Listen
             "gemini" -> GeminiBrain(prefs.getString("gemini_api_key", "") ?: "")
             "openai" -> OpenAIBrain(prefs.getString("openai_api_key", "") ?: "")
             "deepseek" -> DeepSeekBrain(prefs.getString("deepseek_api_key", "") ?: "")
+            "pollinations" -> PollinationsBrain()
             else -> ClaudeBrain(prefs.getString("claude_api_key", "") ?: "")
         }
     }
