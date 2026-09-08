@@ -1,35 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:background="@color/void_black">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Claude API Key"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/apiKeyInput"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="sk-ant-..."
-        android:inputType="textPassword" />
+        android:orientation="vertical"
+        android:padding="24dp">
 
-    <Switch
-        android:id="@+id/localBackendSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Use offline local model instead"
-        android:layout_marginTop="24dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AI BACKEND"
+            android:textColor="@color/core_idle_cyan"
+            android:fontFamily="monospace"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
 
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        android:layout_marginTop="24dp" />
+        <RadioGroup
+            android:id="@+id/backendGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
 
-</LinearLayout>
+            <RadioButton android:id="@+id/radioClaude" android:text="Claude (Anthropic) — paid"
+                android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <RadioButton android:id="@+id/radioGemini" android:text="Gemini (Google) — free tier"
+                android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <RadioButton android:id="@+id/radioOpenAI" android:text="OpenAI — paid"
+                android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <RadioButton android:id="@+id/radioDeepSeek" android:text="DeepSeek — cheap/promo credit"
+                android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <RadioButton android:id="@+id/radioLocal" android:text="Offline local model — fully free"
+                android:textColor="@color/text_primary" android:layout_width="match_parent" android:layout_height="wrap_content" />
+        </RadioGroup>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Claude API Key" android:textColor="@color/text_dim" android:fontFamily="monospace" />
+        <EditText android:id="@+id/claudeKeyInput" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:hint="sk-ant-..." android:inputType="textPassword" android:textColor="@color/text_primary" />
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Gemini API Key" android:textColor="@color/text_dim" android:fontFamily="monospace"
+            android:layout_marginTop="16dp" />
+        <EditText android:id="@+id/geminiKeyInput" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:hint="AIza..." android:inputType="textPassword" android:textColor="@color/text_primary" />
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="OpenAI API Key" android:textColor="@color/text_dim" android:fontFamily="monospace"
+            android:layout_marginTop="16dp" />
+        <EditText android:id="@+id/openaiKeyInput" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:hint="sk-..." android:inputType="textPassword" android:textColor="@color/text_primary" />
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="DeepSeek API Key" android:textColor="@color/text_dim" android:fontFamily="monospace"
+            android:layout_marginTop="16dp" />
+        <EditText android:id="@+id/deepseekKeyInput" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:hint="sk-..." android:inputType="textPassword" android:textColor="@color/text_primary" />
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SAVE"
+            android:fontFamily="monospace"
+            android:textColor="@color/core_idle_cyan"
+            android:backgroundTint="@color/panel_dark"
+            android:layout_marginTop="24dp" />
+
+    </LinearLayout>
+</ScrollView>

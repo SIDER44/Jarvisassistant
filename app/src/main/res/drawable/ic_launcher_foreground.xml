@@ -3,12 +3,38 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+
+    <!-- outer hexagon frame -->
     <path
-        android:pathData="M54,20 A34,34 0 1,1 53.9,20"
-        android:strokeColor="#00E5FF"
-        android:strokeWidth="5"
+        android:pathData="M54,14 L83,31 L83,65 L54,82 L25,65 L25,31 Z"
+        android:strokeColor="#39FF88"
+        android:strokeWidth="3"
         android:fillColor="#00000000" />
+
+    <!-- inner hexagon -->
     <path
-        android:pathData="M54,42 A12,12 0 1,1 53.9,42"
-        android:fillColor="#00E5FF" />
+        android:pathData="M54,30 L70,40 L70,58 L54,68 L38,58 L38,40 Z"
+        android:strokeColor="#39FF88"
+        android:strokeWidth="2.5"
+        android:fillColor="#00000000" />
+
+    <!-- core dot -->
+    <path
+        android:pathData="M54,42 A6,6 0 1,1 53.9,42"
+        android:fillColor="#39FF88" />
+
+    <!-- circuit traces branching out from the hexagon corners -->
+    <path
+        android:pathData="M25,31 L10,31 M25,65 L10,65 M83,31 L98,31 M83,65 L98,65 M54,14 L54,4 M54,82 L54,98"
+        android:strokeColor="#39FF88"
+        android:strokeWidth="2"
+        android:fillColor="#00000000" />
+
+    <!-- small circuit nodes at trace ends -->
+    <path android:pathData="M10,31 m-2,0 a2,2 0 1,1 4,0 a2,2 0 1,1 -4,0" android:fillColor="#39FF88" />
+    <path android:pathData="M10,65 m-2,0 a2,2 0 1,1 4,0 a2,2 0 1,1 -4,0" android:fillColor="#39FF88" />
+    <path android:pathData="M98,31 m-2,0 a2,2 0 1,1 4,0 a2,2 0 1,1 -4,0" android:fillColor="#39FF88" />
+    <path android:pathData="M98,65 m-2,0 a2,2 0 1,1 4,0 a2,2 0 1,1 -4,0" android:fillColor="#39FF88" />
+    <path android:pathData="M54,4 m-2,0 a2,2 0 1,1 4,0 a2,2 0 1,1 -4,0" android:fillColor="#39FF88" />
+    <path android:pathData="M54,98 m-2,0 a2,2 0 1,1 4,0 a2,2 0 1,1 -4,0" android:fillColor="#39FF88" />
 </vector>

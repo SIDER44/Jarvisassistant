@@ -149,6 +149,30 @@ exchange. Everything is driven by hex values in `colors.xml` and one custom `Vie
 easy to retheme (try icy blue/white, or a red "Ultron" palette) by just changing the
 color tokens, no redesign needed.
 
+## What's new: fully hands-free + more commands
+
+- **Wake word is now ON by default** and runs fully in the background — say "Jarvis," it captures your command with no screen/tap needed, and speaks the reply. No activity popup, no manual trigger.
+- **First-launch greeting** — the very first time you open the app, Jarvis introduces itself out loud.
+- **New commands**: `"play <song>"` (opens a music app's voice search), `"text <number or contact> saying <message>"` (sends an SMS directly — needs SMS + Contacts permission, granted on first launch).
+- **New icon**: a green circuit-hexagon on black, replacing the soft blue circle.
+- **Crash hardening**: brain calls, actions, and TTS are now wrapped so a bad API response or missing TTS voice can't crash the whole app — it logs the error and recovers instead.
+
+If your commit history looks like this since you deployed the previous version, it's the same repo — just push app/src changes and the new .github and drawable files, then re-run Actions.
+
+## Choosing an AI brain (multiple providers supported)
+
+Open Jarvis → Settings. Pick one backend and paste its key — you can store all four keys at once and just flip the radio button to switch anytime, no rebuild needed.
+
+| Provider | Cost | Get a key |
+|---|---|---|
+| **Gemini** (Google) | Free tier is genuinely usable for personal assistant use | https://aistudio.google.com/apikey |
+| **DeepSeek** | Very cheap; some accounts get promo credit | https://platform.deepseek.com |
+| **Claude** (Anthropic) | Pay-as-you-go | https://console.anthropic.com |
+| **OpenAI** | Pay-as-you-go, no free tier | https://platform.openai.com/api-keys |
+| **Local (offline)** | Fully free, no key needed | See "fully free" section above |
+
+If you want to start with zero cost, **Gemini is the best pick** of the paid-API options — sign up, generate a key, select "Gemini" in Settings, paste it, save.
+
 ## Known limitations / honest expectations
 
 - The offline local model is a phone-sized model — it'll be noticeably less capable than Claude, and each reply can take a few seconds on mid-range hardware.
