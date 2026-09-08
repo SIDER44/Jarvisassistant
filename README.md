@@ -159,6 +159,22 @@ color tokens, no redesign needed.
 
 If your commit history looks like this since you deployed the previous version, it's the same repo — just push app/src changes and the new .github and drawable files, then re-run Actions.
 
+## Important: settings were resetting on every update — now fixed
+
+Every GitHub Actions build was signing the APK with a brand-new random debug
+key, so Android treated each rebuild as a completely different app and
+force-uninstalled the old one before installing the new one — wiping all your
+saved settings (API keys, theme, wake word toggle) every single time you
+updated.
+
+Fixed by committing a fixed `debug.keystore` to the repo (see `app/build.gradle.kts`),
+so every build now uses the same signature and future updates install cleanly
+in place, keeping your settings. **This one time**, you'll need to manually
+uninstall the old Jarvis app first (since it's switching signing keys from the
+old random one to this new fixed one — Android will refuse to install over a
+mismatched signature) — but from here on, future updates will preserve
+everything without needing to uninstall.
+
 ## HUD dashboard upgrade
 
 Inspired by the classic Iron Man interface:

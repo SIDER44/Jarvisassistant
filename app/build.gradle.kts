@@ -7,6 +7,15 @@ android {
     namespace = "com.jarvis.assistant"
     compileSdk = 34
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = rootProject.file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     defaultConfig {
         applicationId = "com.jarvis.assistant"
         minSdk = 26          // Android 8.0+ (covers Android 13 / API 33 devices)
