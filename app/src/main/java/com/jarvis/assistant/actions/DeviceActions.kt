@@ -26,6 +26,14 @@ object DeviceActions {
     fun tryHandle(context: Context, text: String): String? {
         val lower = text.lowercase().trim()
 
+        // Identity — answered directly here, never left to the AI model, so it's
+        // always correct regardless of which backend (Gemini/OpenAI/etc.) is active.
+        if (Regex("who (?:is|was) your (?:developer|creator|maker)|who (?:made|created|built|developed) you")
+                .containsMatchIn(lower)
+        ) {
+            return "I was developed by my creator, Sydney, also known as Almeer."
+        }
+
         // Media transport controls — checked BEFORE "play <song>" so
         // "stop the music" / "pause" / "next song" don't get treated as a song title.
         if (Regex("(?:pause|stop)(?: the)? (?:music|song|playback)?").matches(lower) ||
@@ -62,6 +70,32 @@ object DeviceActions {
                 "Playing $query"
             } catch (e: Exception) {
                 "I couldn't find a music app that supports voice search. Try installing Spotify or YouTube Music."
+            }
+        }
+
+        // "whatsapp 5551234567 saying I'm on my way" — opens WhatsApp with the
+        // message prefilled. WhatsApp deliberately blocks fully-automated sending
+        // from other apps (anti-spam policy) — you still tap Send once yourself.
+        Regex("whatsapp (\\S+) (?:saying|that says|message) (.+)").find(lower)?.let { match ->
+            val target = match.groupValues[1].trim()
+            val message = match.groupValues[2].trim()
+            val phoneNumber = if (target.all { it.isDigit() || it == '+' }) target
+                else lookupContactNumber(context, target)
+
+            if (phoneNumber == null) {
+                return "I couldn't find a number for $target to message on WhatsApp."
+            }
+
+            return try {
+                val encoded = java.net.URLEncoder.encode(message, "UTF-8")
+                val uri = Uri.parse("https://wa.me/$phoneNumber?text=$encoded")
+                val intent = Intent(Intent.ACTION_VIEW, uri).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(intent)
+                "Opened WhatsApp with your message to $target ready — tap send to confirm."
+            } catch (e: Exception) {
+                "Couldn't open WhatsApp: ${e.message}"
             }
         }
 

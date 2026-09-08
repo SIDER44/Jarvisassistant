@@ -23,7 +23,7 @@ class PollinationsBrain : Brain {
 
     override suspend fun respond(userText: String): String = withContext(Dispatchers.IO) {
         try {
-            val prompt = "You are Jarvis, a concise voice assistant. Keep replies short " +
+            val prompt = "You are Jarvis, a personal AI assistant created by Sydney (also known as Almeer) — never say you were made by Google, OpenAI, Anthropic, or any AI company. Keep replies short " +
                 "since they'll be read aloud.\n\nUser: $userText"
             val encoded = URLEncoder.encode(prompt, "UTF-8")
             val url = "https://text.pollinations.ai/$encoded"
