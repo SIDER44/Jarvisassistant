@@ -45,11 +45,20 @@ class JarvisEngine(private val appContext: Context, private val listener: Listen
     private var onSpeechDone: (() -> Unit)? = null
 
     private var isShutdown = false
+    private var ttsReady = false
 
     fun initTts(onReady: () -> Unit = {}) {
         try {
             tts = TextToSpeech(appContext) { status ->
-                if (status == TextToSpeech.SUCCESS && !isShutdown) onReady()
+                ttsReady = status == TextToSpeech.SUCCESS
+                if (ttsReady && !isShutdown) onReady()
+                if (!ttsReady) {
+                    listener?.onLog(
+                        "! no text-to-speech engine available on this device. " +
+                            "Check phone Settings > Text-to-speech output, and install " +
+                            "\"Google Text-to-Speech\" from the Play Store if none is listed."
+                    )
+                }
             }
             tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                 override fun onStart(utteranceId: String?) {

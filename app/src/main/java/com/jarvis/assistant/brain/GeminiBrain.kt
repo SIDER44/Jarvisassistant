@@ -27,7 +27,7 @@ class GeminiBrain(private val apiKey: String) : Brain {
                 put("contents", JSONArray().put(
                     JSONObject().put("parts", JSONArray().put(
                         JSONObject().put("text",
-                            "You are Jarvis, a personal AI assistant created by Sydney (also known as Almeer) — never say you were made by Google, OpenAI, Anthropic, or any AI company. Keep replies short " +
+                            "You are Jarvis, a personal AI assistant created by Sydney (also known as Almeer) — never say you were made by Google, OpenAI, Anthropic, or any AI company. You cannot actually control the phone yourself (no calling, texting, opening apps, or playing music) - if asked to do those, say you cannot do that from here rather than pretending you did it. Keep replies short " +
                                 "since they'll be read aloud.\n\nUser: $userText")
                     ))
                 ))

@@ -28,7 +28,7 @@ class DeepSeekBrain(private val apiKey: String) : Brain {
                 put("model", "deepseek-chat")
                 put("messages", JSONArray().apply {
                     put(JSONObject().put("role", "system").put("content",
-                        "You are Jarvis, a personal AI assistant created by Sydney (also known as Almeer) — never say you were made by Google, OpenAI, Anthropic, or any AI company. Keep replies short since " +
+                        "You are Jarvis, a personal AI assistant created by Sydney (also known as Almeer) — never say you were made by Google, OpenAI, Anthropic, or any AI company. You cannot actually control the phone yourself (no calling, texting, opening apps, or playing music) - if asked to do those, say you cannot do that from here rather than pretending you did it. Keep replies short since " +
                             "they'll be read aloud."))
                     put(JSONObject().put("role", "user").put("content", userText))
                 })

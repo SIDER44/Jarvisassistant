@@ -203,6 +203,25 @@ your actual GitHub username/repo (already set to `SIDER44/JarvisAssistant`).
 - **"search for [anything]"** — opens a Google search
 - Anything else falls through to your selected AI brain for a conversational reply
 
+## Fixes: fake action success, phone calling, TTS diagnosis
+
+- **The AI was hallucinating actions.** Asking it to "call someone" fell through
+  to the AI model (no pattern matched "call"), and the model just *said* it did
+  something without any real device control — a false success message. Fixed
+  two ways: (1) added a real **"call [name/number]"** command that places an
+  actual phone call via `ACTION_CALL` (needs Phone permission — this dials
+  immediately with no confirmation tap, so a misheard name could call the
+  wrong contact; that's the tradeoff for true hands-free calling), and (2) every
+  AI model's system prompt now explicitly says it cannot control the phone and
+  must say so instead of pretending.
+- **WhatsApp**: only messaging is possible (`"whatsapp [name] saying [text]"`),
+  not calling — WhatsApp doesn't expose an official Android intent to start a
+  call automatically, so that's a real platform limitation, not a bug here.
+- **Text-to-speech silently failing**: now logs a specific diagnostic once at
+  startup if no TTS engine is available, instead of a vague repeated error —
+  check Settings > Text-to-speech output on your phone and install "Google
+  Text-to-Speech" from the Play Store if none is listed.
+
 ## HUD dashboard upgrade
 
 Inspired by the classic Iron Man interface:

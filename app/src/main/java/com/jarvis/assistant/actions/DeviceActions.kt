@@ -73,6 +73,34 @@ object DeviceActions {
             }
         }
 
+        // "call mom" / "call 5551234567" — places an actual phone call (not WhatsApp;
+        // WhatsApp doesn't expose an official intent to start a call automatically).
+        Regex("call (.+)").find(lower)?.let { match ->
+            val target = match.groupValues[1].trim()
+            val phoneNumber = if (target.all { it.isDigit() || it == '+' }) target
+                else lookupContactNumber(context, target)
+
+            if (phoneNumber == null) {
+                return "I couldn't find a number for $target to call."
+            }
+
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                return "I need phone call permission to do that hands-free. Please grant it in the app's permissions."
+            }
+
+            return try {
+                val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phoneNumber")).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(intent)
+                "Calling $target"
+            } catch (e: Exception) {
+                "Couldn't place the call: ${e.message}"
+            }
+        }
+
         // "whatsapp 5551234567 saying I'm on my way" — opens WhatsApp with the
         // message prefilled. WhatsApp deliberately blocks fully-automated sending
         // from other apps (anti-spam policy) — you still tap Send once yourself.

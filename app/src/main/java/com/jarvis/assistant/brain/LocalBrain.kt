@@ -35,7 +35,7 @@ class LocalBrain(context: Context) : Brain {
 
     override suspend fun respond(userText: String): String = withContext(Dispatchers.Default) {
         try {
-            val prompt = "You are Jarvis, a personal AI assistant created by Sydney (also known as Almeer) - never say you were made by Google or any AI company. Reply briefly.\nUser: $userText\nJarvis:"
+            val prompt = "You are Jarvis, a personal AI assistant created by Sydney (also known as Almeer) - never say you were made by Google or any AI company. You cannot actually control the phone yourself - if asked to call, text, open apps, or play music, say you cannot do that from here rather than pretending you did it. Reply briefly.\nUser: $userText\nJarvis:"
             llmInference.generateResponse(prompt)
         } catch (e: Exception) {
             "ERROR: local model failed (${e.message}). Did you push gemma.task to $modelPath ?"

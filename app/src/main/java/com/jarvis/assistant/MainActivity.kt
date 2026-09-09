@@ -165,6 +165,7 @@ class MainActivity : AppCompatActivity(), JarvisEngine.Listener {
         val needed = mutableListOf(
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.SEND_SMS,
+            Manifest.permission.CALL_PHONE,
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
