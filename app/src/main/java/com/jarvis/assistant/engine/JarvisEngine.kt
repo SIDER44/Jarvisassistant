@@ -49,10 +49,20 @@ class JarvisEngine(private val appContext: Context, private val listener: Listen
 
     fun initTts(onReady: () -> Unit = {}) {
         try {
-            tts = TextToSpeech(appContext) { status ->
+            var fallbackAttempted = false
+            lateinit var initListener: TextToSpeech.OnInitListener
+            initListener = TextToSpeech.OnInitListener { status ->
                 ttsReady = status == TextToSpeech.SUCCESS
-                if (ttsReady && !isShutdown) onReady()
-                if (!ttsReady) {
+                if (ttsReady) {
+                    tts?.language = java.util.Locale.getDefault()
+                    if (!isShutdown) onReady()
+                } else if (!fallbackAttempted) {
+                    // Explicit Google engine binding failed — retry with whatever
+                    // the system default is, in case Google's package name isn't
+                    // present but another working engine is.
+                    fallbackAttempted = true
+                    tts = TextToSpeech(appContext, initListener)
+                } else {
                     listener?.onLog(
                         "! no text-to-speech engine available on this device. " +
                             "Check phone Settings > Text-to-speech output, and install " +
@@ -60,6 +70,10 @@ class JarvisEngine(private val appContext: Context, private val listener: Listen
                     )
                 }
             }
+            // Try Google's engine explicitly first — on some OEM phones the system
+            // default TTS binding differs from what's shown as "preferred" in
+            // settings, which can cause silent init failures.
+            tts = TextToSpeech(appContext, initListener, "com.google.android.tts")
             tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                 override fun onStart(utteranceId: String?) {
                     if (!isShutdown) listener?.onStateChanged(EngineState.SPEAKING)
@@ -113,6 +127,7 @@ class JarvisEngine(private val appContext: Context, private val listener: Listen
                 null
             }
             if (localResult != null) {
+                listener?.onLog("jarvis: $localResult")
                 speak(localResult, onComplete)
                 return
             }

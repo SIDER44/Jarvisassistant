@@ -58,7 +58,7 @@ object DeviceActions {
         }
 
         // "play believer by imagine dragons" / "play some jazz"
-        Regex("play (?:the song )?(.+)").find(lower)?.let { match ->
+        Regex("^play (?:the song )?(.+)").find(lower)?.let { match ->
             val query = match.groupValues[1].trim()
             val intent = Intent(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH).apply {
                 putExtra(MediaStore.EXTRA_MEDIA_FOCUS, "vnd.android.cursor.item/*")
@@ -75,7 +75,7 @@ object DeviceActions {
 
         // "call mom" / "call 5551234567" — places an actual phone call (not WhatsApp;
         // WhatsApp doesn't expose an official intent to start a call automatically).
-        Regex("call (.+)").find(lower)?.let { match ->
+        Regex("^call (.+)").find(lower)?.let { match ->
             val target = match.groupValues[1].trim()
             val phoneNumber = if (target.all { it.isDigit() || it == '+' }) target
                 else lookupContactNumber(context, target)
@@ -104,7 +104,7 @@ object DeviceActions {
         // "whatsapp 5551234567 saying I'm on my way" — opens WhatsApp with the
         // message prefilled. WhatsApp deliberately blocks fully-automated sending
         // from other apps (anti-spam policy) — you still tap Send once yourself.
-        Regex("whatsapp (\\S+) (?:saying|that says|message) (.+)").find(lower)?.let { match ->
+        Regex("^whatsapp (\\S+) (?:saying|that says|message) (.+)").find(lower)?.let { match ->
             val target = match.groupValues[1].trim()
             val message = match.groupValues[2].trim()
             val phoneNumber = if (target.all { it.isDigit() || it == '+' }) target
@@ -128,7 +128,7 @@ object DeviceActions {
         }
 
         // "text 5551234567 saying I'm running late" / "text mom saying on my way"
-        Regex("text (\\S+) (?:saying|that says|message) (.+)").find(lower)?.let { match ->
+        Regex("^text (\\S+) (?:saying|that says|message) (.+)").find(lower)?.let { match ->
             val target = match.groupValues[1].trim()
             val message = match.groupValues[2].trim()
 
@@ -158,26 +158,33 @@ object DeviceActions {
             }
         }
 
-        // "open spotify" / "launch spotify"
-        Regex("(?:open|launch|start) (.+)").find(lower)?.let { match ->
+        // "open spotify" / "launch spotify" / "open whatsapp status" (extra words tolerated)
+        Regex("^(?:open|launch|start) (.+)").find(lower)?.let { match ->
             val appName = match.groupValues[1].trim()
             val pm = context.packageManager
             val apps = pm.getInstalledApplications(0)
+
+            // Try an exact-ish match first, then fall back to matching on the
+            // first significant word so trailing extra words ("...and call
+            // this number", "...status") don't prevent the app from opening.
+            val words = appName.split(" ").filter { it.length > 2 }
             val target = apps.firstOrNull {
-                pm.getApplicationLabel(it).toString().lowercase().contains(appName)
+                val label = pm.getApplicationLabel(it).toString().lowercase()
+                label.contains(appName) || words.any { w -> label.contains(w) }
             }
             if (target != null) {
                 val launchIntent = pm.getLaunchIntentForPackage(target.packageName)
                 if (launchIntent != null) {
                     launchIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     context.startActivity(launchIntent)
-                    return "Opening $appName"
+                    return "Opening ${pm.getApplicationLabel(target)}"
                 }
             }
+            return "I couldn't find an app matching \"$appName\" installed on this phone."
         }
 
         // "set an alarm for 7 am" / "set alarm for 7:30"
-        Regex("set (?:an? )?alarm (?:for|at) (\\d{1,2})(?::(\\d{2}))?\\s*(am|pm)?").find(lower)?.let { match ->
+        Regex("^set (?:an? )?alarm (?:for|at) (\\d{1,2})(?::(\\d{2}))?\\s*(am|pm)?").find(lower)?.let { match ->
             var hour = match.groupValues[1].toInt()
             val minute = match.groupValues[2].toIntOrNull() ?: 0
             val meridiem = match.groupValues[3]
@@ -195,7 +202,7 @@ object DeviceActions {
         }
 
         // "search for best pizza near me"
-        Regex("search (?:for|the web for)? ?(.+)").find(lower)?.let { match ->
+        Regex("^search (?:for|the web for)? ?(.+)").find(lower)?.let { match ->
             val query = match.groupValues[1].trim()
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q=$query")).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
